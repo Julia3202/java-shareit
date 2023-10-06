@@ -9,7 +9,7 @@ import ru.practicum.shareit.item.model.Item;
 @RequiredArgsConstructor
 public class ItemValidator {
     public boolean validName(Item item) {
-        if (item.getName().isBlank() || item.getName() == null) {
+        if (item.getName().isBlank()) {
             log.info("Поле с названием не заполнено.");
             throw new ValidationException("Заполните поле с названием.");
         }

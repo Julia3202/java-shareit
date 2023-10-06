@@ -50,13 +50,9 @@ public class UserRepositoryImpl implements UserRepository {
                 throw new OtherException("На один адрес электронной почты можно зарегистрировать одного пользователя.");
             }
         }
-        removeUser(id);
-        if (userDto.getName() != null) {
-            user.setName(userDto.getName());
-        }
-        if (userDto.getEmail() != null) {
-            user.setEmail(userDto.getEmail());
-        }
+        emailList.remove(user.getEmail());
+        Optional.ofNullable(userDto.getName()).ifPresent(x -> user.setName(userDto.getName()));
+        Optional.ofNullable(userDto.getEmail()).ifPresent(x -> user.setEmail(userDto.getEmail()));
         userList.put(user.getId(), user);
         emailList.add(user.getEmail());
         return user;

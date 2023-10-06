@@ -15,9 +15,9 @@ public class RequestMapper {
     public static Request toItemRequest(RequestDto requestDto) {
         return new Request(
                 requestDto.getId(),
-                requestDto.getDescription() != null ? requestDto.getDescription() : null,
-                requestDto.getRequestor() != null ? requestDto.getRequestor() : null,
-                requestDto.getCreated() != null ? requestDto.getCreated() : null
+                requestDto.getDescription(),
+                requestDto.getRequestor(),
+                requestDto.getCreated()
         );
     }
 

@@ -7,7 +7,7 @@ import ru.practicum.shareit.user.model.User;
 @Slf4j
 public class UserValidator {
     public boolean validName(User user) {
-        if (user.getName() == null || user.getName().isBlank()) {
+        if (user.getName().isBlank()) {
             log.info("Поле с именем должно быть заполнено.");
             throw new ValidationException("Заполните поле с именем.");
         }
@@ -18,9 +18,8 @@ public class UserValidator {
         if ((user.getEmail() == null) || (!user.getEmail().contains("@"))) {
             log.warn("Поле 'email' не может быть пустым и должен содержать символ '@'.");
             throw new ValidationException("Поле 'email' не может быть пустым и должен содержать символ '@'.");
-        } else {
-            return true;
         }
+        return true;
     }
 
     public boolean validate(User user) {

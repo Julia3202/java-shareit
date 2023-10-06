@@ -18,9 +18,9 @@ public class ItemMapper {
     public static Item toItem(ItemDto itemDto, User user, Request request) {
         return new Item(
                 itemDto.getId(),
-                itemDto.getName() != null ? itemDto.getName() : null,
-                itemDto.getDescription() != null ? itemDto.getDescription() : null,
-                itemDto.getAvailable() != null ? itemDto.getAvailable() : null,
+                itemDto.getName(),
+                itemDto.getDescription(),
+                itemDto.getAvailable(),
                 user,
                 request
         );

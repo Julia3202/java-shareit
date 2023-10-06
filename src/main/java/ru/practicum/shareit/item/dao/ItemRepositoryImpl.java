@@ -9,15 +9,12 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Slf4j
 @Repository
-public class ItemRepositoryImp implements ItemRepository {
+public class ItemRepositoryImpl implements ItemRepository {
     private final ItemValidator itemValidator = new ItemValidator();
     private final Map<Long, Item> itemList = new HashMap<>();
     private int count = 1;
@@ -44,20 +41,10 @@ public class ItemRepositoryImp implements ItemRepository {
             throw new NotFoundException("Пользователь " + user.getName() + " не является владельцем." +
                     " Изменение невозможно.");
         }
-        removeItem(user, id);
-        if (itemDto.getDescription() != null) {
-            item.setDescription(itemDto.getDescription());
-        }
-        if (itemDto.getName() != null) {
-            item.setName(itemDto.getName());
-        }
-        if (itemDto.getAvailable() != null) {
-            item.setAvailable(itemDto.getAvailable());
-        }
+        Optional.ofNullable(itemDto.getDescription()).ifPresent(x -> item.setDescription(itemDto.getDescription()));
+        Optional.ofNullable(itemDto.getName()).ifPresent(x -> item.setName(itemDto.getName()));
+        Optional.ofNullable(itemDto.getAvailable()).ifPresent(x -> item.setAvailable(itemDto.getAvailable()));
         itemList.put(id, item);
-
-        System.out.println(itemList);
-
         return item;
     }
 
