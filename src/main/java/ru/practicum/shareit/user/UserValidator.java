@@ -1,13 +1,14 @@
 package ru.practicum.shareit.user;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.user.model.User;
 
 @Slf4j
 public class UserValidator {
     public boolean validName(User user) {
-        if (user.getName().isBlank()) {
+        if (StringUtils.isBlank(user.getName())) {
             log.info("Поле с именем должно быть заполнено.");
             throw new ValidationException("Заполните поле с именем.");
         }

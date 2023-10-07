@@ -2,6 +2,7 @@ package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.model.Item;
 
@@ -9,7 +10,7 @@ import ru.practicum.shareit.item.model.Item;
 @RequiredArgsConstructor
 public class ItemValidator {
     public boolean validName(Item item) {
-        if (item.getName().isBlank()) {
+        if (StringUtils.isBlank(item.getName())) {
             log.info("Поле с названием не заполнено.");
             throw new ValidationException("Заполните поле с названием.");
         }
@@ -17,7 +18,7 @@ public class ItemValidator {
     }
 
     public boolean validDescription(Item item) {
-        if (item.getDescription() == null || item.getDescription().isBlank()) {
+        if (StringUtils.isBlank(item.getDescription())) {
             log.info("Поле с описание не заполнено.");
             throw new ValidationException("Заполните поле - описание.");
         }

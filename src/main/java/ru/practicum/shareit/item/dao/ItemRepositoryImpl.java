@@ -41,9 +41,9 @@ public class ItemRepositoryImpl implements ItemRepository {
             throw new NotFoundException("Пользователь " + user.getName() + " не является владельцем." +
                     " Изменение невозможно.");
         }
-        Optional.ofNullable(itemDto.getDescription()).ifPresent(x -> item.setDescription(itemDto.getDescription()));
-        Optional.ofNullable(itemDto.getName()).ifPresent(x -> item.setName(itemDto.getName()));
-        Optional.ofNullable(itemDto.getAvailable()).ifPresent(x -> item.setAvailable(itemDto.getAvailable()));
+        Optional.ofNullable(itemDto.getDescription()).ifPresent(item::setDescription);
+        Optional.ofNullable(itemDto.getName()).ifPresent(item::setName);
+        Optional.ofNullable(itemDto.getAvailable()).ifPresent(item::setAvailable);
         itemList.put(id, item);
         return item;
     }

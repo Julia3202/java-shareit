@@ -17,6 +17,7 @@
 
 	<properties>
 		<java.version>11</java.version>
+		<apache.comon.version>3.13.0</apache.comon.version>
 	</properties>
 
 	<dependencies>
@@ -54,7 +55,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${apache.comon.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
