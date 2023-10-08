@@ -1,7 +1,6 @@
 package ru.practicum.shareit.user;
 
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.user.dao.UserRepository;
 import ru.practicum.shareit.user.dto.UserDto;
@@ -19,8 +18,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto create(UserDto userDto) {
         User user = UserMapper.toUser(userDto);
-        User userRepo = userRepository.create(user);
-        return UserMapper.toUserDto(userRepo);
+        User userFromRepository = userRepository.create(user);
+        return UserMapper.toUserDto(userFromRepository);
     }
 
     @Override
