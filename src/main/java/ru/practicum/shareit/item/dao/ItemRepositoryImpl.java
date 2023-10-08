@@ -2,6 +2,7 @@ package ru.practicum.shareit.item.dao;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.ItemValidator;
@@ -79,12 +80,10 @@ public class ItemRepositoryImpl implements ItemRepository {
         if (text.isBlank()) {
             return itemLists;
         }
-        String newText = text.toLowerCase();
         for (Item items : itemList.values()) {
-            String description = items.getDescription().toLowerCase();
-            String name = items.getName().toLowerCase();
-            if (description.contains(newText) || name.contains(newText) || description.startsWith(newText) ||
-                    description.endsWith(newText) || name.startsWith(newText) || name.endsWith(newText)) {
+            String description = items.getDescription();
+            String name = items.getName();
+            if (StringUtils.containsIgnoreCase(description, text) || StringUtils.containsIgnoreCase(name, text)) {
                 if (items.getAvailable()) {
                     itemLists.add(items);
                 }

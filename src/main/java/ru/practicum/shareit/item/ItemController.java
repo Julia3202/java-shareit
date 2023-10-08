@@ -10,8 +10,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/items")
 public class ItemController {
-    private final ItemService itemService;
     private static final String USER_ID = "X-Sharer-User-Id";
+    private final ItemService itemService;
 
     @PostMapping
     public ItemDto create(@RequestHeader(USER_ID) long userId, @RequestBody ItemDto itemDto) {
