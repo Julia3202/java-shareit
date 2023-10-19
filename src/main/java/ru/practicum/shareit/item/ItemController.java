@@ -2,6 +2,7 @@ package ru.practicum.shareit.item;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 
 import java.util.List;
@@ -40,7 +41,13 @@ public class ItemController {
     }
 
     @DeleteMapping("/{id}")
-    public void removeItem(@RequestHeader(USER_ID) long userId, @PathVariable("id") long id) {
-        itemService.removeItem(userId, id);
+    public void delete(@RequestHeader(USER_ID) long userId, @PathVariable("id") long id) {
+        itemService.delete(userId, id);
+    }
+
+    @PostMapping("/{itemId}/comment")
+    public CommentDto addComment(@RequestHeader(USER_ID) long userId, @PathVariable long itemId,
+                                 @RequestBody CommentDto commentDto) {
+        return itemService.saveComment(userId, itemId, commentDto);
     }
 }
