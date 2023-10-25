@@ -37,7 +37,7 @@ public class ItemValidator {
     }
 
     public boolean validItem(Item item) {
-        if (!(validDescription(item) && validName(item))) {
+        if (!(validDescription(item) && validName(item)) && validAvailable(item)) {
             log.info("Проверьте правильность заполненных данных.");
             throw new ValidationException("Ошибка валидации. Ошибка при заполнении одного из полей.");
         }

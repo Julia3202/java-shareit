@@ -19,12 +19,14 @@ public class Request {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "request_id")
     private long id;
 
     @Column(nullable = false, length = 500)
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "requestor_id")
     private User requestor;
 
     private LocalDateTime created;

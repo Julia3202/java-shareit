@@ -1,13 +1,11 @@
 package ru.practicum.shareit.request;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.request.dao.RequestRepository;
 
 
-@AllArgsConstructor
-@NoArgsConstructor(force = true)
+@RequiredArgsConstructor
 @Service
 public class RequestServiseImpl {
     private final RequestRepository requestRepository;

@@ -2,17 +2,11 @@ package ru.practicum.shareit;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-
-import javax.persistence.Entity;
 
 @SpringBootApplication
-@EntityScan("ru.practicum")
-@EnableJpaRepositories(basePackages = "ru.practicum")
 public class ShareItApp {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ShareItApp.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ShareItApp.class, args);
+    }
 }

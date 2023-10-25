@@ -28,4 +28,8 @@ public class UserMapper {
                 userDto.getEmail() != null ? userDto.getEmail() : user.getEmail()
         );
     }
+
+    public static UserDtoBooking toUserDtoBooking(User booker) {
+        return new UserDtoBooking(booker.getId());
+    }
 }

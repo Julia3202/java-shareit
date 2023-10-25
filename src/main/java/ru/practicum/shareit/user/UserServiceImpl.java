@@ -1,10 +1,7 @@
 package ru.practicum.shareit.user;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.user.dao.UserRepository;
 import ru.practicum.shareit.user.dto.UserDto;
@@ -15,21 +12,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@NoArgsConstructor(force = true)
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserValidator userValidator = new UserValidator();
 
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
     @Override
-    @Transactional
     public UserDto create(UserDto userDto) {
         User user = UserMapper.toUser(userDto);
-//        userValidator.validate(user);
-//        findById(user.getId());
+        userValidator.validate(user);
         User userFromRepository = userRepository.save(user);
         return UserMapper.toUserDto(userFromRepository);
     }
@@ -40,7 +31,8 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new NotFoundException("Пользователь с ID" + id + " не найден."));
         User userFromDto = UserMapper.toUser(userDto, user);
         userFromDto.setId(id);
-        return UserMapper.toUserDto(userFromDto);
+        User userFromRepository = userRepository.save(userFromDto);
+        return UserMapper.toUserDto(userFromRepository);
     }
 
     @Override
