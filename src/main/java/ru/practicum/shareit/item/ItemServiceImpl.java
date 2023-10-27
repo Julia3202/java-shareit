@@ -2,6 +2,7 @@ package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dao.BookingRepository;
 import ru.practicum.shareit.booking.dto.BookingDtoForItem;
 import ru.practicum.shareit.booking.dto.BookingMapper;
@@ -34,6 +35,7 @@ public class ItemServiceImpl implements ItemService {
     private final CommentRepository commentRepository;
 
     @Override
+    @Transactional
     public ItemDto create(long userId, ItemDto itemDto) {
         if (itemDto.getName() == null || itemDto.getName().isEmpty()) {
             throw new ValidationException("Не заполнено поле с названием вещи.");
@@ -57,6 +59,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional
     public ItemDto update(long userId, ItemDto itemDto, long id) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с ID" + id + " не найден."));
@@ -158,10 +161,11 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void delete(long userId, long id) {
-        itemRepository.deleteByOwner_IdAndId(userId, id);
+        itemRepository.deleteByOwnerIdAndId(userId, id);
     }
 
     @Override
+    @Transactional
     public CommentDto saveComment(long userId, long itemId, CommentDto commentDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с ID" + userId + " не найден."));

@@ -17,5 +17,5 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
             " like upper(concat('%', ?1, '%'))) ")
     List<Item> findByNameOrDescription(String text);
 
-    void deleteByOwner_IdAndId(long userId, long id);
+    void deleteByOwnerIdAndId(long userId, long id);
 }

@@ -27,6 +27,7 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
+    private final BookingValidator bookingValidator = new BookingValidator();
 
     @Override
     @Transactional
@@ -37,24 +38,12 @@ public class BookingServiceImpl implements BookingService {
             throw new ValidationException("Укажите вещь которую хотите забронировать.");
         }
         Item item = itemRepository.findById(bookingDtoItem.getItemId())
-                .orElseThrow(() -> new NotFoundException("Вещь с ID-" + bookingDtoItem.getItemId() + "не найдена."));
+                .orElseThrow(() -> new NotFoundException("Вещь с ID- " + bookingDtoItem.getItemId() + " не найдена."));
         if (!item.getAvailable()) {
             throw new ValidationException("Данная вещь не доступна для аренды.");
         }
-        if (bookingDtoItem.getStart() == null || bookingDtoItem.getEnd() == null) {
-            throw new ValidationException("Поля с датой начала и окончания аренды обязательны к заполнению.");
-        }
-        if (bookingDtoItem.getEnd().isBefore(bookingDtoItem.getStart()) ||
-                bookingDtoItem.getEnd().equals(bookingDtoItem.getStart())) {
-            throw new ValidationException("Неверно указана дата или время возврата вещи. Дата и время окончания брони " +
-                    "должно быть позже даты начала бронирования, поправьте данные и попробуйте повторить ошибку.");
-        }
-        if (bookingDtoItem.getStart().toString().isBlank() || bookingDtoItem.getStart().isBefore(LocalDateTime.now())) {
-            throw new ValidationException("Укажите желаемую дату бронирования.");
-        }
-        if (item.getOwner().equals(user)) {
-            throw new NotFoundException("Бронирование невозможно. Вещь принадлежить человеку, отправившему запрос.");
-        }
+        bookingValidator.validBooking(bookingDtoItem);
+        bookingValidator.validUserForBooking(item, user);
         Booking booking = BookingMapper.toBooking(bookingDtoItem, item, user);
         booking.setStatus(Status.WAITING);
         Booking bookingFromRepository = bookingRepository.save(booking);
@@ -79,10 +68,9 @@ public class BookingServiceImpl implements BookingService {
                 booking.setStatus(Status.REJECTED);
             }
         } else {
-            throw new ValidationException("Передан неверный статус.");
+            throw new ValidationException("Передан неверный статус- " + booking.getStatus() + ".");
         }
-        Booking saveBooking = bookingRepository.save(booking);
-        return BookingMapper.toBookingDto(saveBooking);
+        return BookingMapper.toBookingDto(bookingRepository.save(booking));
     }
 
     @Override
