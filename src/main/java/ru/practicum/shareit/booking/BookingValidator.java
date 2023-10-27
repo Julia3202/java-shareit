@@ -42,7 +42,7 @@ public class BookingValidator {
         return true;
     }
 
-    public Boolean validBooking(BookingDtoItem bookingDtoItem){
+    public Boolean validBooking(BookingDtoItem bookingDtoItem) {
         return validStartBooking(bookingDtoItem) && validEndBooking(bookingDtoItem);
     }
 }
