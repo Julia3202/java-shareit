@@ -33,19 +33,12 @@ public class ItemServiceImpl implements ItemService {
     private final RequestRepository requestRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
+    private final ItemValidator itemValidator = new ItemValidator();
 
     @Override
     @Transactional
     public ItemDto create(long userId, ItemDto itemDto) {
-        if (itemDto.getName() == null || itemDto.getName().isEmpty()) {
-            throw new ValidationException("Не заполнено поле с названием вещи.");
-        }
-        if (itemDto.getDescription() == null) {
-            throw new ValidationException("Не заполнено поле с описанием вещи.");
-        }
-        if (itemDto.getAvailable() == null) {
-            throw new ValidationException("Не заполнено поле со статусом о доступности вещи.");
-        }
+        itemValidator.validItem(itemDto);
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с ID" + userId + " не найден."));
         Request request = null;
@@ -53,9 +46,7 @@ public class ItemServiceImpl implements ItemService {
             request = requestRepository.findById(itemDto.getRequestId())
                     .orElseThrow(() -> new NotFoundException("Запрос с ID - " + itemDto.getRequestId() + " не найден."));
         }
-        Item item = ItemMapper.toItem(itemDto, user, request);
-        Item itemRepo = itemRepository.save(item);
-        return ItemMapper.toItemDto(itemRepo);
+        return ItemMapper.toItemDto(itemRepository.save(ItemMapper.toItem(itemDto, user, request)));
     }
 
     @Override

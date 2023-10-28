@@ -1,15 +1,13 @@
 package ru.practicum.shareit.item;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import ru.practicum.shareit.exception.ValidationException;
-import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.dto.ItemDto;
 
 @Slf4j
-@RequiredArgsConstructor
 public class ItemValidator {
-    public boolean validName(Item item) {
+    public boolean validName(ItemDto item) {
         if (StringUtils.isBlank(item.getName())) {
             log.info("Поле с названием не заполнено.");
             throw new ValidationException("Заполните поле с названием.");
@@ -17,7 +15,7 @@ public class ItemValidator {
         return true;
     }
 
-    public boolean validDescription(Item item) {
+    public boolean validDescription(ItemDto item) {
         if (StringUtils.isBlank(item.getDescription())) {
             log.info("Поле с описание не заполнено.");
             throw new ValidationException("Заполните поле - описание.");
@@ -25,22 +23,18 @@ public class ItemValidator {
         return true;
     }
 
-    public boolean validAvailable(Item item) {
-        Boolean available = item.getAvailable();
-        if (available == null) {
-            throw new ValidationException("Поле со статусом доступа пусто.");
-        }
-        if (!available) {
-            throw new ValidationException("Вещь не доступна для бронирования.");
+    public boolean validAvailable(ItemDto item) {
+        if (item.getAvailable() == null) {
+            throw new ValidationException("Не заполнено поле со статусом о доступности вещи.");
         }
         return true;
     }
 
-    public boolean validItem(Item item) {
-        if (!(validDescription(item) && validName(item)) && validAvailable(item)) {
-            log.info("Проверьте правильность заполненных данных.");
-            throw new ValidationException("Ошибка валидации. Ошибка при заполнении одного из полей.");
+    public boolean validItem(ItemDto item) {
+        if (validDescription(item) && validName(item) && validAvailable(item)) {
+            return true;
         }
-        return true;
+        log.info("Проверьте правильность заполненных данных.");
+        throw new ValidationException("Ошибка валидации. Ошибка при заполнении одного из полей.");
     }
 }
