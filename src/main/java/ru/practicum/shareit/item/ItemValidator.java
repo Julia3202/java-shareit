@@ -9,7 +9,7 @@ import ru.practicum.shareit.item.dto.ItemDto;
 public class ItemValidator {
     public boolean validName(ItemDto item) {
         if (StringUtils.isBlank(item.getName())) {
-            log.info("Поле с названием не заполнено.");
+            log.warn("Поле с названием не заполнено.");
             throw new ValidationException("Заполните поле с названием.");
         }
         return true;
@@ -17,7 +17,7 @@ public class ItemValidator {
 
     public boolean validDescription(ItemDto item) {
         if (StringUtils.isBlank(item.getDescription())) {
-            log.info("Поле с описание не заполнено.");
+            log.warn("Поле с описание не заполнено.");
             throw new ValidationException("Заполните поле - описание.");
         }
         return true;
