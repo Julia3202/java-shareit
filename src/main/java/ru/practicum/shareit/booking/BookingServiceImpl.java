@@ -14,6 +14,7 @@ import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dao.ItemRepository;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.UserValidatorService;
 import ru.practicum.shareit.user.dao.UserRepository;
 import ru.practicum.shareit.user.model.User;
 
@@ -28,6 +29,7 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
+    private final UserValidatorService userValidatorService;
     private final BookingValidator bookingValidator = new BookingValidator();
 
     @Override
@@ -77,7 +79,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookingDto findBookingById(long userId, long bookingId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("Пользователь с ID- " + userId + " не найден."));
+                .orElseThrow(() -> new NotFoundException("Пользователь с ID" + userId + " не найден."));
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException("Запрос с ID- " + bookingId + " не найден."));
         if (!(booking.getBooker().equals(user))) {
@@ -91,8 +93,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<BookingDto> findUsersBookings(long userId, String state) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("Пользователь с ID- " + userId + " не найден."));
+        userValidatorService.checkUser(userId);
         List<Booking> bookingList;
         switch (DateStatus.valueOf(state)) {
             case ALL:
@@ -123,8 +124,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<BookingDto> findOwnersBookings(long userId, String state) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("Пользователь с ID" + userId + " не найден."));
+        userValidatorService.checkUser(userId);
         List<Booking> bookingList;
         switch (DateStatus.valueOf(state)) {
             case ALL:

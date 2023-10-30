@@ -16,6 +16,7 @@ import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.dao.RequestRepository;
 import ru.practicum.shareit.request.model.Request;
+import ru.practicum.shareit.user.UserValidatorService;
 import ru.practicum.shareit.user.dao.UserRepository;
 import ru.practicum.shareit.user.model.User;
 
@@ -33,6 +34,7 @@ public class ItemServiceImpl implements ItemService {
     private final RequestRepository requestRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
+    private final UserValidatorService userValidatorService;
     private final ItemValidator itemValidator = new ItemValidator();
 
     @Override
@@ -75,8 +77,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDtoDated findItemById(long userId, long itemId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("Пользователь с ID" + userId + " не найден."));
+        userValidatorService.checkUser(userId);
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("Вещь с ID- " + itemId + "не найдена."));
         List<CommentDto> commentDtoList = commentRepository.findCommentsByItemId(itemId).stream()
@@ -94,8 +95,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDtoDated> findAllItemFromUser(long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("Пользователь с ID" + userId + " не найден."));
+        userValidatorService.checkUser(userId);
         List<Item> items = itemRepository.findByOwner_Id(userId);
         if (items.isEmpty()) {
             throw new NotFoundException("Пользователь " + userId + " не является хозяином ни одной вещи");
