@@ -8,6 +8,7 @@ import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoItem;
 import ru.practicum.shareit.booking.dto.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.model.DateStatus;
 import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
@@ -93,23 +94,23 @@ public class BookingServiceImpl implements BookingService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с ID- " + userId + " не найден."));
         List<Booking> bookingList;
-        switch (state.toUpperCase()) {
-            case "ALL":
+        switch (DateStatus.valueOf(state)) {
+            case ALL:
                 bookingList = bookingRepository.findByBookerIdOrderByStartDesc(userId);
                 break;
-            case "CURRENT":
+            case CURRENT:
                 bookingList = bookingRepository.findAllCurrentByBookerId(userId, LocalDateTime.now());
                 break;
-            case "PAST":
+            case PAST:
                 bookingList = bookingRepository.findAllPastByBookerId(userId, LocalDateTime.now());
                 break;
-            case "FUTURE":
+            case FUTURE:
                 bookingList = bookingRepository.findAllFutureByBookerId(userId, LocalDateTime.now());
                 break;
-            case "WAITING":
+            case WAITING:
                 bookingList = bookingRepository.findAllWaitingByBookerId(userId);
                 break;
-            case "REJECTED":
+            case REJECTED:
                 bookingList = bookingRepository.findAllRejectedByBookerId(userId);
                 break;
             default:
@@ -125,23 +126,23 @@ public class BookingServiceImpl implements BookingService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с ID" + userId + " не найден."));
         List<Booking> bookingList;
-        switch (state.toUpperCase()) {
-            case "ALL":
+        switch (DateStatus.valueOf(state)) {
+            case ALL:
                 bookingList = bookingRepository.findByOwnerIdOrderByStartDesc(userId);
                 break;
-            case "CURRENT":
+            case CURRENT:
                 bookingList = bookingRepository.findAllCurrentByOwnerId(userId, LocalDateTime.now());
                 break;
-            case "PAST":
+            case PAST:
                 bookingList = bookingRepository.findAllPastByOwnerId(userId, LocalDateTime.now());
                 break;
-            case "FUTURE":
+            case FUTURE:
                 bookingList = bookingRepository.findAllFutureByOwnerId(userId, LocalDateTime.now());
                 break;
-            case "WAITING":
+            case WAITING:
                 bookingList = bookingRepository.findAllWaitingByOwnerId(userId);
                 break;
-            case "REJECTED":
+            case REJECTED:
                 bookingList = bookingRepository.findAllRejectedByOwnerId(userId);
                 break;
             default:
