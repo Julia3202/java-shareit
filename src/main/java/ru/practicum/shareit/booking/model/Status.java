@@ -11,5 +11,5 @@ public enum Status {
     REJECTED("Бронирование отклонено владельцем."),
     CANCELED("Бронирование отменено создателем.");
 
-    private String nameStatus;
+    private final String nameStatus;
 }
