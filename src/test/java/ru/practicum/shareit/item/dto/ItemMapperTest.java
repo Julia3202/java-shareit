@@ -24,7 +24,7 @@ class ItemMapperTest {
     private BookingDtoForItem nextBooking;
 
     @BeforeEach
-    void BeforeEach() {
+    void beforeEach() {
         LocalDateTime start = LocalDateTime.now();
         LocalDateTime end = start.plusDays(5);
         itemDto = new ItemDto(1, "itemName", "itemDescription", true, 1L);

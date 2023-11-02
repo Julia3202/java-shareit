@@ -20,7 +20,7 @@ class RequestMapperTest {
     List<ItemDto> items = new ArrayList<>();
 
     @BeforeEach
-    void BeforeEach() {
+    void beforeEach() {
         LocalDateTime start = LocalDateTime.now();
         LocalDateTime end = start.plusDays(5);
         user = new User(1, "userName", "user@mail.ru");

@@ -22,7 +22,7 @@ class CommentMapperTest {
     private Comment comment;
 
     @BeforeEach
-    void BeforeEach() {
+    void beforeEach() {
         LocalDateTime start = LocalDateTime.now();
         LocalDateTime end = start.plusDays(5);
         item = new Item(1, "itemName", "itemDescription", true, user, request);

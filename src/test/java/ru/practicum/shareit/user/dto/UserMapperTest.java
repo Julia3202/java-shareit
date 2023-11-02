@@ -11,7 +11,7 @@ class UserMapperTest {
     private UserDto userDto;
 
     @BeforeEach
-    void BeforeEach() {
+    void beforeEach() {
         user = new User(1, "userName", "user@mail.ru");
         userDto = new UserDto(1L, "userName", "user@mail.ru");
     }

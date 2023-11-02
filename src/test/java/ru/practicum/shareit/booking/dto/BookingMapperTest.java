@@ -19,7 +19,7 @@ class BookingMapperTest {
     private BookingDtoItem bookingDtoItem;
 
     @BeforeEach
-    void BeforeEach() {
+    void beforeEach() {
         LocalDateTime start = LocalDateTime.now();
         LocalDateTime end = start.plusDays(5);
         user = new User(1, "userName", "user@mail.ru");
