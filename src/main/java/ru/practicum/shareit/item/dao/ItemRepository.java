@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
-    List<Item> findByOwner_Id(long userId);
+    List<Item> findByOwnerId(long userId);
 
     @Query("select i " +
             "from Item as i " +
@@ -18,4 +18,10 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     List<Item> findByNameOrDescription(String text);
 
     void deleteByOwnerIdAndId(long userId, long id);
+
+    Item findByRequestIdOrderById(long requestId);
+
+    List<Item> findAllByRequestIdInOrderById(List<Long> requestIdList);
+
+    List<Item> findAllByRequestRequestorIdNotAndRequestIdInOrderById(long userId, List<Long> requestIdList);
 }

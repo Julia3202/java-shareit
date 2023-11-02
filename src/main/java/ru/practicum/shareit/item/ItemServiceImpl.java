@@ -77,7 +77,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDtoDated findItemById(long userId, long itemId) {
-        userValidatorService.checkUser(userId);
+        userValidatorService.byExistUser(userId);
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("Вещь с ID- " + itemId + "не найдена."));
         List<CommentDto> commentDtoList = commentRepository.findCommentsByItemId(itemId).stream()
@@ -87,16 +87,18 @@ public class ItemServiceImpl implements ItemService {
             return ItemMapper.toItemDtoDated(item, null, null, commentDtoList);
         }
         List<Booking> lastBooking = bookingRepository.findLastBookingByItemId(itemId, LocalDateTime.now());
-        BookingDtoForItem lastBookingFinal = BookingMapper.toItemDtoBooking(lastBooking.isEmpty() ? null : lastBooking.get(0));
+        BookingDtoForItem lastBookingFinal = BookingMapper.toItemDtoBooking(lastBooking.isEmpty()
+                ? null : lastBooking.get(0));
         List<Booking> nextBooking = bookingRepository.findNextBookingByItemId(itemId, LocalDateTime.now());
-        BookingDtoForItem nextBookingFinal = BookingMapper.toItemDtoBooking(nextBooking.isEmpty() ? null : nextBooking.get(0));
+        BookingDtoForItem nextBookingFinal = BookingMapper.toItemDtoBooking(nextBooking.isEmpty()
+                ? null : nextBooking.get(0));
         return ItemMapper.toItemDtoDated(item, lastBookingFinal, nextBookingFinal, commentDtoList);
     }
 
     @Override
     public List<ItemDtoDated> findAllItemFromUser(long userId) {
-        userValidatorService.checkUser(userId);
-        List<Item> items = itemRepository.findByOwner_Id(userId);
+        userValidatorService.byExistUser(userId);
+        List<Item> items = itemRepository.findByOwnerId(userId);
         if (items.isEmpty()) {
             throw new NotFoundException("Пользователь " + userId + " не является хозяином ни одной вещи");
         }
