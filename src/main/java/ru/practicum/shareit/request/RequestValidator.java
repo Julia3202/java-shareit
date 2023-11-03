@@ -9,20 +9,20 @@ public class RequestValidator {
         if (StringUtils.isBlank(requestDto.getDescription())) {
             throw new ValidationException("Поле с описанием обязательно к заполнению.");
         }
-        return false;
+        return true;
     }
 
     public Boolean validFrom(int from) {
         if (from < 0) {
             throw new ValidationException("Значение первого элемента должно быть строго больше 0.");
         }
-        return false;
+        return true;
     }
 
     public Boolean validSize(int size) {
         if (size <= 0) {
             throw new ValidationException("Количество выводимых строк строго должно быть больше 0.");
         }
-        return false;
+        return true;
     }
 }

@@ -31,10 +31,6 @@ public class ItemValidator {
     }
 
     public boolean validItem(ItemDto item) {
-        if (validDescription(item) && validName(item) && validAvailable(item)) {
-            return true;
-        }
-        log.error("Проверьте правильность заполненных данных.");
-        throw new ValidationException("Ошибка валидации. Ошибка при заполнении одного из полей.");
+            return validDescription(item) && validName(item) && validAvailable(item);
     }
 }

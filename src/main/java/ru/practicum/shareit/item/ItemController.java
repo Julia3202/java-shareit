@@ -43,7 +43,7 @@ public class ItemController {
 
     @DeleteMapping("/{id}")
     public void delete(@RequestHeader(USER_ID) long userId, @PathVariable("id") long id) {
-        itemService.delete(userId, id);
+        itemService.deleteById(userId, id);
     }
 
     @PostMapping("/{itemId}/comment")

@@ -99,8 +99,8 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<BookingDto> findUsersBookings(long userId, String state, int from, int size) {
         userValidatorService.byExistUser(userId);
-        requestValidator.validFrom(from);
-        requestValidator.validSize(size);
+//        requestValidator.validFrom(from);
+//        requestValidator.validSize(size);
         Pageable page = PageRequest.of(from / size, size);
         Page<Booking> bookingPage;
         switch (DateStatus.valueOf(state)) {
@@ -136,8 +136,8 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<BookingDto> findOwnersBookings(long userId, String state, int from, int size) {
         userValidatorService.byExistUser(userId);
-        requestValidator.validFrom(from);
-        requestValidator.validSize(size);
+//        requestValidator.validFrom(from);
+//        requestValidator.validSize(size);
         Pageable page = PageRequest.of(from / size, size);
         Page<Booking> bookingPage;
         switch (DateStatus.valueOf(state)) {
