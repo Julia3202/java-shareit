@@ -13,7 +13,6 @@ import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.item.dao.ItemRepository;
 import ru.practicum.shareit.item.dto.ItemDtoBooking;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.request.RequestValidator;
 import ru.practicum.shareit.request.model.Request;
 import ru.practicum.shareit.user.UserValidatorService;
 import ru.practicum.shareit.user.dao.UserRepository;
@@ -21,7 +20,6 @@ import ru.practicum.shareit.user.dto.UserDtoBooking;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,20 +33,11 @@ class BookingServiceImplTest {
     private ItemRepository itemRepository;
     private UserRepository userRepository;
     private BookingServiceImpl bookingService;
-    private UserValidatorService userValidatorService;
-//    private RequestValidator requestValidator = new RequestValidator();
-//    private BookingValidator bookingValidator = new BookingValidator();
     private Item item;
-    private Item itemTwo;
     private User user;
     private User userTwo;
     private Booking booking;
-    private BookingDto bookingDto;
-    private BookingDto bookingDtoTwo;
-    private ItemDtoBooking itemDtoBooking;
-    private ItemDtoBooking itemDtoBookingTwo;
     private BookingDtoItem bookingDtoItem;
-    private BookingDtoItem bookingDtoItemTwo;
 
     @BeforeEach
     void beforeEach() {
@@ -60,19 +49,17 @@ class BookingServiceImplTest {
         item = new Item(1, "itemName", "itemDescription", true, userTwo, request);
         booking = new Booking(1, start, end, item, user, Status.APPROVED);
         bookingDtoItem = new BookingDtoItem(1, start, end, item.getId(), Status.APPROVED);
-        itemDtoBooking = new ItemDtoBooking(1, "itemName");
-        itemDtoBookingTwo = new ItemDtoBooking(2, "itemTwoName");
-        itemTwo = new Item(2, "itemTwoName", "itemTwoDescription", true, userTwo, null);
+        ItemDtoBooking itemDtoBooking = new ItemDtoBooking(1, "itemName");
+        ItemDtoBooking itemDtoBookingTwo = new ItemDtoBooking(2, "itemTwoName");
+        Item itemTwo = new Item(2, "itemTwoName", "itemTwoDescription", true, userTwo, null);
         UserDtoBooking userDtoBooking = new UserDtoBooking(1);
-        bookingDto = new BookingDto(1, start, end, itemDtoBooking, userDtoBooking, Status.APPROVED);
-        bookingDtoTwo = new BookingDto(2, start.plusHours(9), end, itemDtoBookingTwo, userDtoBooking, Status.APPROVED);
-        bookingDtoItemTwo = new BookingDtoItem(2, start.plusHours(9), end, 2L, Status.APPROVED);
+        BookingDto bookingDto = new BookingDto(1, start, end, itemDtoBooking, userDtoBooking, Status.APPROVED);
+        BookingDto bookingDtoTwo = new BookingDto(2, start.plusHours(9), end, itemDtoBookingTwo, userDtoBooking, Status.APPROVED);
+        BookingDtoItem bookingDtoItemTwo = new BookingDtoItem(2, start.plusHours(9), end, 2L, Status.APPROVED);
         userRepository = mock(UserRepository.class);
-        userValidatorService = new UserValidatorService(userRepository);
+        UserValidatorService userValidatorService = new UserValidatorService(userRepository);
         bookingRepository = mock(BookingRepository.class);
         itemRepository = mock(ItemRepository.class);
-//        bookingValidator = mock(BookingValidator.class);
-//        requestValidator = mock(RequestValidator.class);
         bookingService = new BookingServiceImpl(bookingRepository, itemRepository, userRepository, userValidatorService);
     }
 
@@ -139,20 +126,6 @@ class BookingServiceImplTest {
 
     @Test
     void findUsersBookings() {
-//        when(userRepository.findById(anyLong()))
-//                .thenReturn(Optional.ofNullable(user));
-//        when(itemRepository.findById(anyLong()))
-//                .thenReturn(Optional.ofNullable(item));
-//        bookingService.saveBooking(1, bookingDtoItem);
-//        bookingService.saveBooking(1, bookingDtoItemTwo);
-//        List<BookingDto> bookingDto = bookingService.findUsersBookings(1, "ALL", 0, 2);
-//        assertEquals(1, bookingDto.get(0).getBooker().getId());
-//        assertEquals(1, bookingDto.size());
-//        assertEquals(booking.getStart(), bookingDto.get(0).getStart());
-//        assertEquals(booking.getEnd(), bookingDto.get(0).getEnd());
-//        assertEquals(booking.getItem().getId(), bookingDto.get(0).getItem().getId());
-//        verify(userRepository, times(1))
-//                .findById(anyLong());
 
     }
 
