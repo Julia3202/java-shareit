@@ -131,7 +131,5 @@ class BookingServiceImplTest {
 
     @Test
     void findOwnersBookings() {
-        when(userRepository.findById(anyLong()))
-                .thenReturn(Optional.ofNullable(userTwo));
     }
 }
