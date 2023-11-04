@@ -167,7 +167,7 @@ public class ItemServiceImpl implements ItemService {
         List<Booking> bookingList = bookingRepository.findAllByBookerIdAndItemId(
                 userId, itemId, LocalDateTime.now());
         if (commentDto.getText().isBlank() || commentDto.getText() == null) {
-            throw new ValidationException("нельзя отправлять пустой комментарий.");
+            throw new ValidationException("Нельзя отправлять пустой комментарий.");
         }
         if (bookingList.isEmpty()) {
             throw new ValidationException("Пользователь с ID- " + userId + " не может писать отзыв на вещь с ID- " +

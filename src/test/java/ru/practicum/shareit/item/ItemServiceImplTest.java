@@ -13,6 +13,7 @@ import ru.practicum.shareit.booking.dto.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemDtoDated;
@@ -28,6 +29,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
@@ -71,6 +73,12 @@ class ItemServiceImplTest {
         assertEquals(item.getId(), itemDto.getId());
         assertEquals(item.getName(), itemDto.getName());
         assertEquals(item.getDescription(), itemDto.getDescription());
+        try {
+            itemDto.setRequestId(3L);
+            itemService.create(1, itemDto);
+        } catch (NotFoundException exception) {
+            assertEquals("Запрос с ID - 3 не найден.", exception.getMessage());
+        }
     }
 
     @Test
@@ -81,6 +89,18 @@ class ItemServiceImplTest {
         TypedQuery<Item> query = entityManager.createQuery("select i from Item i where i.id = :id", Item.class);
         Item item = query.setParameter("id", userDto.getId()).getSingleResult();
         assertEquals("itemsName", item.getName());
+        try {
+            itemService.update(2, itemDto, itemDto.getId());
+        } catch (NotFoundException exception) {
+            assertEquals("Пользователь user2Name не является владельцем. Изменение невозможно.",
+                    exception.getMessage());
+        }
+        try {
+            itemDto.setRequestId(3L);
+            itemService.create(1, itemDto);
+        } catch (NotFoundException exception) {
+            assertEquals("Запрос с ID - 3 не найден.", exception.getMessage());
+        }
     }
 
     @Test
@@ -89,6 +109,9 @@ class ItemServiceImplTest {
         itemDtoDated = itemService.findItemById(userDto.getId(), itemDto.getId());
         assertEquals(itemDtoDated.getName(), itemDto.getName());
         assertEquals(itemDtoDated.getDescription(), itemDto.getDescription());
+        itemService.findItemById(2, itemDto.getId());
+        assertNull(itemDtoDated.getLastBooking());
+        assertNull(itemDtoDated.getNextBooking());
     }
 
     @Test
@@ -96,6 +119,11 @@ class ItemServiceImplTest {
         itemService.create(1, itemDto);
         List<ItemDtoDated> dtoDatedList = itemService.findAllItemFromUser(userDto.getId());
         assertEquals(1, dtoDatedList.size());
+        try {
+            itemService.findAllItemFromUser(2);
+        } catch (NotFoundException exception) {
+            assertEquals("Пользователь 2 не является хозяином ни одной вещи", exception.getMessage());
+        }
     }
 
     @Test
@@ -133,5 +161,18 @@ class ItemServiceImplTest {
         CommentDto commentDtoTest = new CommentDto(1L, "textComment", itemDtoTest, userComment.getName(), start.plusDays(15));
         CommentDto comment = itemService.saveComment(userComment.getId(), 2, commentDtoTest);
         assertEquals(commentDto.getText(), comment.getText());
+        try {
+            commentDto.setText("");
+            itemService.saveComment(2, 2, commentDtoTest);
+        } catch (ValidationException exception) {
+            assertEquals("Нельзя отправлять пустой комментарий.", exception.getMessage());
+        }
+        try {
+            itemService.saveComment(1, 2, commentDtoTest);
+        } catch (ValidationException exception) {
+            assertEquals("Пользователь с ID- 1 не может писать отзыв на вещь с ID- 2, т.к. не соблюдены " +
+                    "условия. Отзыв может оставить только тот пользователь, который брал эту вещь в аренду, и только " +
+                    "после окончания срока аренды.", exception.getMessage());
+        }
     }
 }

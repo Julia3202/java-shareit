@@ -73,9 +73,8 @@ class RequestServiceImplTest {
     @Test
     void findAllRequests() {
         requestService.createRequest(1, requestDto);
-        TypedQuery<Request> query = entityManager.createQuery("select r from Request r ", Request.class);
-        List<Request> requestListOne = query.getResultList();
-        assertEquals(1, requestListOne.size());
+        List<RequestDto> requestList = requestService.findAllRequests(2, 0, 1);
+        assertEquals(1, requestList.size());
     }
 
     @Test
