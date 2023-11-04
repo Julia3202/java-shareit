@@ -144,8 +144,8 @@ public class BookingServiceImplWithPageTest {
                 "from Booking b " +
                 "where b.booker.id = :id and b.start > :time " +
                 "order by b.start desc ", Booking.class);
-        List<Booking> bookingList = bookingTypedQuery.setParameter("id", userDtoTwo.getId()).
-                setParameter("time", LocalDateTime.now()).getResultList();
+        List<Booking> bookingList = bookingTypedQuery.setParameter("id", userDtoTwo.getId())
+                .setParameter("time", LocalDateTime.now()).getResultList();
         Booking booking = bookingList.get(0);
         BookingDto bookingDto = bookingDtoList.get(0);
         assertEquals(bookingDtoList.size(), bookingList.size());
@@ -263,8 +263,8 @@ public class BookingServiceImplWithPageTest {
                 "join b.item i " +
                 "where i.owner.id = :id and b.start > :time  " +
                 "order by b.start desc ", Booking.class);
-        List<Booking> bookingList = bookingTypedQuery.setParameter("id", userDto.getId()).
-                setParameter("time", start).getResultList();
+        List<Booking> bookingList = bookingTypedQuery.setParameter("id", userDto.getId())
+                .setParameter("time", start).getResultList();
         Booking booking = bookingList.get(0);
         BookingDto bookingDto = bookingDtoList.get(0);
         assertEquals(bookingDtoList.size(), bookingList.size());
@@ -286,8 +286,8 @@ public class BookingServiceImplWithPageTest {
                 "join b.item i " +
                 "where i.owner.id = :id and b.start < :time and b.end > :time " +
                 "order by b.start desc ", Booking.class);
-        List<Booking> bookingList = bookingTypedQuery.setParameter("id", userDto.getId()).
-                setParameter("time", start.plusDays(3)).getResultList();
+        List<Booking> bookingList = bookingTypedQuery.setParameter("id", userDto.getId())
+                .setParameter("time", start.plusDays(3)).getResultList();
         Booking booking = bookingList.get(0);
         BookingDto bookingDto = bookingDtoList.get(0);
         assertEquals(bookingDtoList.size(), bookingList.size());
@@ -310,8 +310,8 @@ public class BookingServiceImplWithPageTest {
                 "join b.item i " +
                 "where i.owner.id = :id and b.end < :time  " +
                 "order by b.start desc ", Booking.class);
-        List<Booking> bookingList = bookingTypedQuery.setParameter("id", userDto.getId()).
-                setParameter("time", end.plusDays(1)).getResultList();
+        List<Booking> bookingList = bookingTypedQuery.setParameter("id", userDto.getId())
+                .setParameter("time", end.plusDays(1)).getResultList();
         Booking booking = bookingList.get(0);
         BookingDto bookingDto = bookingDtoList.get(0);
         assertEquals(bookingDtoList.size(), bookingList.size());
