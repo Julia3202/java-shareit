@@ -11,12 +11,10 @@ import ru.practicum.shareit.booking.dto.BookingDtoItem;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.item.dao.ItemRepository;
-import ru.practicum.shareit.item.dto.ItemDtoBooking;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.model.Request;
 import ru.practicum.shareit.user.UserValidatorService;
 import ru.practicum.shareit.user.dao.UserRepository;
-import ru.practicum.shareit.user.dto.UserDtoBooking;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
@@ -49,13 +47,6 @@ class BookingServiceImplTest {
         item = new Item(1, "itemName", "itemDescription", true, userTwo, request);
         booking = new Booking(1, start, end, item, user, Status.APPROVED);
         bookingDtoItem = new BookingDtoItem(1, start, end, item.getId(), Status.APPROVED);
-        ItemDtoBooking itemDtoBooking = new ItemDtoBooking(1, "itemName");
-        ItemDtoBooking itemDtoBookingTwo = new ItemDtoBooking(2, "itemTwoName");
-        Item itemTwo = new Item(2, "itemTwoName", "itemTwoDescription", true, userTwo, null);
-        UserDtoBooking userDtoBooking = new UserDtoBooking(1);
-        BookingDto bookingDto = new BookingDto(1, start, end, itemDtoBooking, userDtoBooking, Status.APPROVED);
-        BookingDto bookingDtoTwo = new BookingDto(2, start.plusHours(9), end, itemDtoBookingTwo, userDtoBooking, Status.APPROVED);
-        BookingDtoItem bookingDtoItemTwo = new BookingDtoItem(2, start.plusHours(9), end, 2L, Status.APPROVED);
         userRepository = mock(UserRepository.class);
         UserValidatorService userValidatorService = new UserValidatorService(userRepository);
         bookingRepository = mock(BookingRepository.class);
@@ -122,14 +113,5 @@ class BookingServiceImplTest {
                 .findById(anyLong());
         verify(bookingRepository, times(1))
                 .findById(anyLong());
-    }
-
-    @Test
-    void findUsersBookings() {
-
-    }
-
-    @Test
-    void findOwnersBookings() {
     }
 }

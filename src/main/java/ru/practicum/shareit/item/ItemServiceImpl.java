@@ -79,7 +79,7 @@ public class ItemServiceImpl implements ItemService {
     public ItemDtoDated findItemById(long userId, long itemId) {
         userValidatorService.byExistUser(userId);
         Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new NotFoundException("Вещь с ID- " + itemId + "не найдена."));
+                .orElseThrow(() -> new NotFoundException("Вещь с ID- " + itemId + " не найдена."));
         List<CommentDto> commentDtoList = commentRepository.findCommentsByItemId(itemId).stream()
                 .map(CommentMapper::toCommentDto)
                 .collect(Collectors.toList());

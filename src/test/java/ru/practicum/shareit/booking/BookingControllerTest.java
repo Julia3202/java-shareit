@@ -14,7 +14,6 @@ import ru.practicum.shareit.booking.dto.BookingDtoItem;
 import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.item.dto.ItemDtoBooking;
 import ru.practicum.shareit.user.dto.UserDtoBooking;
-import ru.practicum.shareit.user.model.User;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -42,20 +41,16 @@ class BookingControllerTest {
 
     public static final String USER_ID = "X-Sharer-User-Id";
 
-    private ItemDtoBooking itemDto;
-    private UserDtoBooking userDto;
-    private User user;
     private BookingDto bookingDto;
     private BookingDtoItem bookingDtoItem;
-    private List<BookingDto> bookingDtoList = new ArrayList<>();
+    private final List<BookingDto> bookingDtoList = new ArrayList<>();
 
     @BeforeEach
      void beforeEach() {
         LocalDateTime start = LocalDateTime.now();
         LocalDateTime end = start.plusDays(5);
-        user = new User(1, "userName", "user@mail.ru");
-        itemDto = new ItemDtoBooking(1, "nameItem");
-        userDto = new UserDtoBooking(1);
+        ItemDtoBooking itemDto = new ItemDtoBooking(1, "nameItem");
+        UserDtoBooking userDto = new UserDtoBooking(1);
         bookingDto = new BookingDto(1, start, end, itemDto, userDto, Status.APPROVED);
         bookingDtoItem = new BookingDtoItem(1, start, end, itemDto.getId(), Status.APPROVED);
         bookingDtoList.add(bookingDto);
