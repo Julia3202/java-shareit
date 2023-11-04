@@ -53,7 +53,7 @@ public class BookingServiceImpl implements BookingService {
         bookingValidator.validBooking(bookingDtoItem);
         bookingValidator.validUserForBooking(item, user);
         Booking booking = BookingMapper.toBooking(bookingDtoItem, item, user);
-        if(bookingDtoItem.getStatus() == null) {
+        if (bookingDtoItem.getStatus() == null) {
             bookingDtoItem.setStatus(Status.WAITING);
         }
         booking.setStatus(bookingDtoItem.getStatus());
