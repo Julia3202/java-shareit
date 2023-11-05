@@ -1,6 +1,7 @@
 package ru.practicum.shareit.request;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ public class RequestServiceImpl implements RequestService {
     @Override
     @Transactional
     public RequestDto createRequest(long userId, RequestDto requestDto) {
-        User user = userValidatorService.byExistUser(userId);
+        User user = userValidatorService.existUserById(userId);
         requestValidator.validDescription(requestDto);
         Request requestFromDto = RequestMapper.toRequest(requestDto, user);
         Request request = requestRepository.save(requestFromDto);
@@ -42,7 +43,7 @@ public class RequestServiceImpl implements RequestService {
     @Override
     @Transactional
     public List<RequestDto> findRequestByUserId(long userId) {
-        userValidatorService.byExistUser(userId);
+        userValidatorService.existUserById(userId);
         List<Request> requests = requestRepository.findAllByRequestorIdOrderByCreatedDesc(userId);
         List<Long> requestIdList = requests.stream()
                 .map(Request::getId)
@@ -66,7 +67,7 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public RequestDto findRequestById(long userId, long requestId) {
-        userValidatorService.byExistUser(userId);
+        userValidatorService.existUserById(userId);
         Request request = requestRepository.findById(requestId)
                 .orElseThrow(() -> new NotFoundException("Запрос с ID- " + requestId + " не найден."));
         List<ItemDto> itemDtoList = new ArrayList<>();
@@ -80,7 +81,6 @@ public class RequestServiceImpl implements RequestService {
     }
 
     private List<RequestDto> createListRequestDto(List<Request> requests, List<Item> items) {
-
         List<RequestDto> requestDtoList = new ArrayList<>();
         for (Request request : requests) {
             List<ItemDto> itemDtoList = new ArrayList<>();

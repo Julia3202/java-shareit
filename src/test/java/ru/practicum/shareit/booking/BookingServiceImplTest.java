@@ -74,7 +74,6 @@ class BookingServiceImplTest {
                 .findById(anyLong());
         verify(bookingRepository, times(1))
                 .save(any());
-
     }
 
     @Test

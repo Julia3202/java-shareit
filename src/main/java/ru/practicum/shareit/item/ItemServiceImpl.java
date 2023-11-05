@@ -77,7 +77,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDtoDated findItemById(long userId, long itemId) {
-        userValidatorService.byExistUser(userId);
+        userValidatorService.existUserById(userId);
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("Вещь с ID- " + itemId + " не найдена."));
         List<CommentDto> commentDtoList = commentRepository.findCommentsByItemId(itemId).stream()
@@ -97,7 +97,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDtoDated> findAllItemFromUser(long userId) {
-        userValidatorService.byExistUser(userId);
+        userValidatorService.existUserById(userId);
         List<Item> items = itemRepository.findByOwnerId(userId);
         if (items.isEmpty()) {
             throw new NotFoundException("Пользователь " + userId + " не является хозяином ни одной вещи");

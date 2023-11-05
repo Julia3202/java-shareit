@@ -37,9 +37,9 @@ class BookingControllerTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
-    public static final String USER_ID = "X-Sharer-User-Id";
+    private static final String USER_ID = "X-Sharer-User-Id";
 
     private BookingDto bookingDto;
     private BookingDtoItem bookingDtoItem;
@@ -75,7 +75,6 @@ class BookingControllerTest {
                 .andExpect(jsonPath("$.status", is(bookingDto.getStatus().toString())));
         verify(bookingService, times(1))
                 .saveBooking(anyLong(), any());
-
     }
 
     @Test

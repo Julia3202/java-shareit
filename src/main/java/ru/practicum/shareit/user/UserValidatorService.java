@@ -11,7 +11,7 @@ import ru.practicum.shareit.user.model.User;
 public class UserValidatorService {
     private final UserRepository userRepository;
 
-    public User byExistUser(Long userId) {
+    public User existUserById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с ID- " + userId + " не найден."));
     }

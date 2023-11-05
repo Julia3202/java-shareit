@@ -34,7 +34,7 @@ class UserControllerTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
     private UserDto userDto;
     private final List<UserDto> userDtoList = new ArrayList<>();
 

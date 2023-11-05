@@ -10,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @RequestMapping(path = "/requests")
 public class RequestController {
-    public static final String USER_ID = "X-Sharer-User-Id";
+    private static final String USER_ID = "X-Sharer-User-Id";
     private final RequestService requestService;
 
     @PostMapping

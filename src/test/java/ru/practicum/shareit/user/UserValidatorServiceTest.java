@@ -27,7 +27,7 @@ class UserValidatorServiceTest {
         User user = new User(1, "userName", "user@mail.ru");
         when(userRepository.findById(anyLong()))
                 .thenReturn(Optional.of(user));
-        User userTest = userValidatorService.byExistUser(1L);
+        User userTest = userValidatorService.existUserById(1L);
         assertEquals(user.getId(), userTest.getId());
         assertEquals(user.getName(), userTest.getName());
         assertEquals(user.getEmail(), userTest.getEmail());
