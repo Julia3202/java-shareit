@@ -1,32 +1,28 @@
 package ru.practicum.shareit.request.dto;
 
+import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.request.model.Request;
+import ru.practicum.shareit.user.model.User;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class RequestMapper {
-    public static RequestDto toItemRequestDto(Request request) {
+    public static RequestDto toRequestDto(Request request, List<ItemDto> items) {
         return new RequestDto(
                 request.getId(),
                 request.getDescription(),
-                request.getRequestor(),
+                items,
                 request.getCreated()
         );
     }
 
-    public static Request toItemRequest(RequestDto requestDto) {
+    public static Request toRequest(RequestDto requestDto, User user) {
         return new Request(
                 requestDto.getId(),
                 requestDto.getDescription(),
-                requestDto.getRequestor(),
-                requestDto.getCreated()
-        );
-    }
-
-    public static Request toItemRequest(RequestDto requestDto, Request request) {
-        return new Request(
-                requestDto.getId(),
-                requestDto.getDescription() != null ? requestDto.getDescription() : request.getDescription(),
-                requestDto.getRequestor() != null ? requestDto.getRequestor() : request.getRequestor(),
-                requestDto.getCreated() != null ? requestDto.getCreated() : request.getCreated()
+                user,
+                requestDto.getCreated() != null ? requestDto.getCreated() : LocalDateTime.now()
         );
     }
 }

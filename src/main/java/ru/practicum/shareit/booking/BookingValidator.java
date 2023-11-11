@@ -28,7 +28,7 @@ public class BookingValidator {
         if (bookingDtoItem.getEnd().isBefore(bookingDtoItem.getStart()) ||
                 bookingDtoItem.getEnd().equals(bookingDtoItem.getStart())) {
             throw new ValidationException("Неверно указана дата или время возврата вещи. Дата и время окончания брони " +
-                    "должно быть позже даты начала бронирования, поправьте данные и попробуйте повторить ошибку.");
+                    "должно быть позже даты начала бронирования, поправьте данные и попробуйте повторить попытку.");
         }
         return true;
     }

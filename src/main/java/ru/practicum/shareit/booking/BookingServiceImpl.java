@@ -1,6 +1,9 @@
 package ru.practicum.shareit.booking;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dao.BookingRepository;
@@ -14,6 +17,7 @@ import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dao.ItemRepository;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.RequestValidator;
 import ru.practicum.shareit.user.UserValidatorService;
 import ru.practicum.shareit.user.dao.UserRepository;
 import ru.practicum.shareit.user.model.User;
@@ -30,13 +34,14 @@ public class BookingServiceImpl implements BookingService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
     private final UserValidatorService userValidatorService;
+    private final RequestValidator requestValidator = new RequestValidator();
     private final BookingValidator bookingValidator = new BookingValidator();
 
     @Override
     @Transactional
     public BookingDto saveBooking(long userId, BookingDtoItem bookingDtoItem) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("Пользователь с ID" + userId + " не найден."));
+                .orElseThrow(() -> new NotFoundException("Пользователь с ID- " + userId + " не найден."));
         if (bookingDtoItem.getItemId() == null) {
             throw new ValidationException("Укажите вещь которую хотите забронировать.");
         }
@@ -48,7 +53,10 @@ public class BookingServiceImpl implements BookingService {
         bookingValidator.validBooking(bookingDtoItem);
         bookingValidator.validUserForBooking(item, user);
         Booking booking = BookingMapper.toBooking(bookingDtoItem, item, user);
-        booking.setStatus(Status.WAITING);
+        if (bookingDtoItem.getStatus() == null) {
+            bookingDtoItem.setStatus(Status.WAITING);
+        }
+        booking.setStatus(bookingDtoItem.getStatus());
         Booking bookingFromRepository = bookingRepository.save(booking);
         return BookingMapper.toBookingDto(bookingFromRepository);
     }
@@ -57,11 +65,11 @@ public class BookingServiceImpl implements BookingService {
     @Transactional
     public BookingDto bookingApproved(long userId, long bookingId, boolean approved) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("Пользователь с ID" + userId + " не найден."));
+                .orElseThrow(() -> new NotFoundException("Пользователь с ID- " + userId + " не найден."));
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException("Запрос с ID- " + bookingId + " не найден."));
         if (!booking.getItem().getOwner().equals(user)) {
-            throw new NotFoundException("Пользователь с ID" + userId + " не оставлял запрос на вещь с ID -" +
+            throw new NotFoundException("Пользователь с ID- " + userId + " не оставлял запрос на вещь с ID -" +
                     booking.getItem().getId());
         }
         if (booking.getStatus() == Status.WAITING) {
@@ -79,7 +87,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookingDto findBookingById(long userId, long bookingId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("Пользователь с ID" + userId + " не найден."));
+                .orElseThrow(() -> new NotFoundException("Пользователь с ID- " + userId + " не найден."));
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException("Запрос с ID- " + bookingId + " не найден."));
         if (!(booking.getBooker().equals(user))) {
@@ -92,63 +100,77 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingDto> findUsersBookings(long userId, String state) {
-        userValidatorService.checkUser(userId);
-        List<Booking> bookingList;
+    public List<BookingDto> findUsersBookings(long userId, String state, int from, int size) {
+        userValidatorService.existUserById(userId);
+        requestValidator.validFrom(from);
+        requestValidator.validSize(size);
+        Pageable page = PageRequest.of(from / size, size);
+        Page<Booking> bookingPage;
         switch (DateStatus.valueOf(state)) {
             case ALL:
-                bookingList = bookingRepository.findByBookerIdOrderByStartDesc(userId);
+                bookingPage = bookingRepository.findAllByBookerIdOrderByStartDesc(userId, page);
                 break;
             case CURRENT:
-                bookingList = bookingRepository.findAllCurrentByBookerId(userId, LocalDateTime.now());
+                bookingPage = bookingRepository.findAllByBookerIdAndStartBeforeAndEndAfterOrderByStart(userId,
+                        LocalDateTime.now(), LocalDateTime.now(), page);
                 break;
             case PAST:
-                bookingList = bookingRepository.findAllPastByBookerId(userId, LocalDateTime.now());
+                bookingPage = bookingRepository.findAllByBookerIdAndEndBeforeAndStatusOrderByStartDesc(userId,
+                        LocalDateTime.now(), Status.APPROVED, page);
                 break;
             case FUTURE:
-                bookingList = bookingRepository.findAllFutureByBookerId(userId, LocalDateTime.now());
+                bookingPage = bookingRepository.findAllByBookerIdAndStartAfterOrderByStartDesc(userId,
+                        LocalDateTime.now(), page);
                 break;
             case WAITING:
-                bookingList = bookingRepository.findAllWaitingByBookerId(userId);
+                bookingPage = bookingRepository.findAllByBookerIdAndStatusOrderByStartDesc(userId, Status.WAITING, page);
                 break;
             case REJECTED:
-                bookingList = bookingRepository.findAllRejectedByBookerId(userId);
+                bookingPage = bookingRepository.findAllByBookerIdAndStatusOrderByStartDesc(userId, Status.REJECTED, page);
                 break;
             default:
                 throw new ValidationException("Unknown state: UNSUPPORTED_STATUS");
         }
-        return bookingList.stream()
+        return bookingPage.stream()
                 .map(BookingMapper::toBookingDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<BookingDto> findOwnersBookings(long userId, String state) {
-        userValidatorService.checkUser(userId);
-        List<Booking> bookingList;
+    public List<BookingDto> findOwnersBookings(long userId, String state, int from, int size) {
+        userValidatorService.existUserById(userId);
+        requestValidator.validFrom(from);
+        requestValidator.validSize(size);
+        Pageable page = PageRequest.of(from / size, size);
+        Page<Booking> bookingPage;
         switch (DateStatus.valueOf(state)) {
             case ALL:
-                bookingList = bookingRepository.findByOwnerIdOrderByStartDesc(userId);
+                bookingPage = bookingRepository.findAllByItemOwnerIdOrderByStartDesc(userId, page);
                 break;
             case CURRENT:
-                bookingList = bookingRepository.findAllCurrentByOwnerId(userId, LocalDateTime.now());
+                bookingPage = bookingRepository.findAllByItemOwnerIdAndStartBeforeAndEndAfterOrderByStart(userId,
+                        LocalDateTime.now(), LocalDateTime.now(), page);
                 break;
             case PAST:
-                bookingList = bookingRepository.findAllPastByOwnerId(userId, LocalDateTime.now());
+                bookingPage = bookingRepository.findAllByItemOwnerIdAndEndBeforeAndStatusOrderByStartDesc(userId,
+                        LocalDateTime.now(), Status.APPROVED, page);
                 break;
             case FUTURE:
-                bookingList = bookingRepository.findAllFutureByOwnerId(userId, LocalDateTime.now());
+                bookingPage = bookingRepository.findAllByItemOwnerIdAndStartAfterOrderByStartDesc(userId,
+                        LocalDateTime.now(), page);
                 break;
             case WAITING:
-                bookingList = bookingRepository.findAllWaitingByOwnerId(userId);
+                bookingPage = bookingRepository.findAllByItemOwnerIdAndStatusOrderByStartDesc(userId,
+                        Status.WAITING, page);
                 break;
             case REJECTED:
-                bookingList = bookingRepository.findAllRejectedByOwnerId(userId);
+                bookingPage = bookingRepository.findAllByItemOwnerIdAndStatusOrderByStartDesc(userId,
+                        Status.REJECTED, page);
                 break;
             default:
                 throw new ValidationException("Unknown state: UNSUPPORTED_STATUS");
         }
-        return bookingList.stream()
+        return bookingPage.stream()
                 .map(BookingMapper::toBookingDto)
                 .collect(Collectors.toList());
     }

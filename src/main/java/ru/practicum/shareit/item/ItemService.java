@@ -19,7 +19,7 @@ public interface ItemService {
 
     List<ItemDto> search(String text);
 
-    void delete(long userId, long id);
+    void deleteById(long userId, long id);
 
     CommentDto saveComment(long userId, long itemId, CommentDto commentDto);
 }

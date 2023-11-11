@@ -77,9 +77,9 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDtoDated findItemById(long userId, long itemId) {
-        userValidatorService.checkUser(userId);
+        userValidatorService.existUserById(userId);
         Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new NotFoundException("Вещь с ID- " + itemId + "не найдена."));
+                .orElseThrow(() -> new NotFoundException("Вещь с ID- " + itemId + " не найдена."));
         List<CommentDto> commentDtoList = commentRepository.findCommentsByItemId(itemId).stream()
                 .map(CommentMapper::toCommentDto)
                 .collect(Collectors.toList());
@@ -87,16 +87,18 @@ public class ItemServiceImpl implements ItemService {
             return ItemMapper.toItemDtoDated(item, null, null, commentDtoList);
         }
         List<Booking> lastBooking = bookingRepository.findLastBookingByItemId(itemId, LocalDateTime.now());
-        BookingDtoForItem lastBookingFinal = BookingMapper.toItemDtoBooking(lastBooking.isEmpty() ? null : lastBooking.get(0));
+        BookingDtoForItem lastBookingFinal = BookingMapper.toItemDtoBooking(lastBooking.isEmpty()
+                ? null : lastBooking.get(0));
         List<Booking> nextBooking = bookingRepository.findNextBookingByItemId(itemId, LocalDateTime.now());
-        BookingDtoForItem nextBookingFinal = BookingMapper.toItemDtoBooking(nextBooking.isEmpty() ? null : nextBooking.get(0));
+        BookingDtoForItem nextBookingFinal = BookingMapper.toItemDtoBooking(nextBooking.isEmpty()
+                ? null : nextBooking.get(0));
         return ItemMapper.toItemDtoDated(item, lastBookingFinal, nextBookingFinal, commentDtoList);
     }
 
     @Override
     public List<ItemDtoDated> findAllItemFromUser(long userId) {
-        userValidatorService.checkUser(userId);
-        List<Item> items = itemRepository.findByOwner_Id(userId);
+        userValidatorService.existUserById(userId);
+        List<Item> items = itemRepository.findByOwnerId(userId);
         if (items.isEmpty()) {
             throw new NotFoundException("Пользователь " + userId + " не является хозяином ни одной вещи");
         }
@@ -151,7 +153,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public void delete(long userId, long id) {
+    public void deleteById(long userId, long id) {
         itemRepository.deleteByOwnerIdAndId(userId, id);
     }
 
@@ -165,7 +167,7 @@ public class ItemServiceImpl implements ItemService {
         List<Booking> bookingList = bookingRepository.findAllByBookerIdAndItemId(
                 userId, itemId, LocalDateTime.now());
         if (commentDto.getText().isBlank() || commentDto.getText() == null) {
-            throw new ValidationException("нельзя отправлять пустой комментарий.");
+            throw new ValidationException("Нельзя отправлять пустой комментарий.");
         }
         if (bookingList.isEmpty()) {
             throw new ValidationException("Пользователь с ID- " + userId + " не может писать отзыв на вещь с ID- " +
