@@ -3,7 +3,6 @@ package ru.practicum.shareit.booking.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import ru.practicum.shareit.booking.model.Status;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;

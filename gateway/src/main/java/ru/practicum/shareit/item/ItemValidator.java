@@ -31,6 +31,6 @@ public class ItemValidator {
     }
 
     public boolean validItem(ItemDto item) {
-            return validDescription(item) && validName(item) && validAvailable(item);
+        return validDescription(item) && validName(item) && validAvailable(item);
     }
 }

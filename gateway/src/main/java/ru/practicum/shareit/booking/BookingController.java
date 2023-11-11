@@ -4,9 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.model.BookingDtoItem;
-import ru.practicum.shareit.booking.model.DateStatus;
 import ru.practicum.shareit.exception.ValidationException;
-import ru.practicum.shareit.request.RequestValidator;
 
 
 @RestController

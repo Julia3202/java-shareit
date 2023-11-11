@@ -26,6 +26,7 @@ public class RequestClient extends BaseClient {
                         .build()
         );
     }
+
     public ResponseEntity<Object> createRequest(long userId, RequestDto requestDto) {
         requestValidator.validDescription(requestDto);
         return post("", userId, requestDto);
