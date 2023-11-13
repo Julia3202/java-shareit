@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
 
+import java.util.List;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("/users")
@@ -32,7 +34,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public void removeUser(@PathVariable("id") long id) {
-        userClient.removeUser(id);
+    public ResponseEntity<Object> removeUser(@PathVariable("id") long id) {
+        return userClient.removeUser(id);
     }
 }
