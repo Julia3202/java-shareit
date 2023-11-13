@@ -14,7 +14,7 @@ import ru.practicum.shareit.item.model.ItemDto;
 
 @Service
 public class ItemClient extends BaseClient {
-    private static final String API_PREFIX = "/bookings";
+    private static final String API_PREFIX = "/items";
     private final ItemValidator itemValidator = new ItemValidator();
 
     @Autowired
