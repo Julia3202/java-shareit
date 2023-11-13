@@ -7,7 +7,7 @@ import ru.practicum.shareit.user.dto.UserDto;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping(path = "/users")
+@RequestMapping("/users")
 public class UserController {
     private final UserClient userClient;
 
