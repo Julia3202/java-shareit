@@ -31,7 +31,7 @@ public class UserClient extends BaseClient {
     }
 
     public ResponseEntity<Object> update(UserDto userDto, long id) {
-        return patch("", userDto);
+        return patch("/" + id, userDto);
     }
 
     public ResponseEntity<Object> findAll() {

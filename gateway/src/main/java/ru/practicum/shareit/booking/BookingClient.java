@@ -8,9 +8,7 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import ru.practicum.shareit.booking.model.BookingDtoItem;
-import ru.practicum.shareit.booking.model.DateStatus;
 import ru.practicum.shareit.client.BaseClient;
-import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.request.RequestValidator;
 
 import java.util.Map;
@@ -45,8 +43,6 @@ public class BookingClient extends BaseClient {
     }
 
     public ResponseEntity<Object> findUsersBookings(long userId, String state, Integer from, Integer size) {
-        DateStatus.stateFrom(state)
-                .orElseThrow(() -> new ValidationException("Unknown state: UNSUPPORTED_STATUS"));
         requestValidator.validFrom(from);
         requestValidator.validSize(size);
         Map<String, Object> parameters = Map.of(
@@ -58,8 +54,6 @@ public class BookingClient extends BaseClient {
     }
 
     public ResponseEntity<Object> findOwnersBookings(long userId, String state, int from, int size) {
-        DateStatus.stateFrom(state)
-                .orElseThrow(() -> new ValidationException("Unknown state: UNSUPPORTED_STATUS"));
         requestValidator.validFrom(from);
         requestValidator.validSize(size);
         Map<String, Object> parameters = Map.of(

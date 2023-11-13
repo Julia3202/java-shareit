@@ -45,7 +45,7 @@ public class ItemClient extends BaseClient {
     }
 
     public ResponseEntity<Object> search(String text) {
-        return get("/search?text" + text);
+        return get("/search?text=" + text);
     }
 
     public void deleteById(long userId, long id) {
