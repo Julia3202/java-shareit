@@ -9,7 +9,7 @@ class DateStatusTest {
     @Test
     void values() {
         DateStatus[] dateStatuses = DateStatus.values();
-        assertEquals(7, dateStatuses.length);
+        assertEquals(6, dateStatuses.length);
     }
 
     @Test

@@ -200,16 +200,6 @@ public class BookingServiceImplWithPageTest {
     }
 
     @Test
-    void findUsersBookingsByUnknownState() {
-        bookingService.saveBooking(2, bookingDtoItem);
-        try {
-            bookingService.findUsersBookings(2, "UNSUPPORTED_STATUS", 0, 1);
-        } catch (ValidationException exception) {
-            assertEquals("Unknown state: UNSUPPORTED_STATUS", exception.getMessage());
-        }
-    }
-
-    @Test
     void findOwnersBookings() {
         bookingService.saveBooking(2, bookingDtoItem);
         List<BookingDto> bookingDtoList = bookingService.findOwnersBookings(1, "ALL", 0, 1);
@@ -343,15 +333,5 @@ public class BookingServiceImplWithPageTest {
         assertEquals(booking.getItem().getId(), bookingDto.getItem().getId());
         assertEquals(booking.getBooker().getId(), bookingDto.getBooker().getId());
         assertEquals(booking.getStatus(), bookingDto.getStatus());
-    }
-
-    @Test
-    void findOwnerBookingsByUnknownState() {
-        bookingService.saveBooking(2, bookingDtoItem);
-        try {
-            bookingService.findOwnersBookings(1, "UNSUPPORTED_STATUS", 0, 1);
-        } catch (ValidationException exception) {
-            assertEquals("Unknown state: UNSUPPORTED_STATUS", exception.getMessage());
-        }
     }
 }
