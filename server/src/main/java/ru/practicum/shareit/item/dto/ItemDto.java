@@ -13,11 +13,8 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class ItemDto {
     private long id;
-    @NotBlank(message = "Укажите название.")
     private String name;
-    @NotBlank(message = "Укажите описание.")
     private String description;
-    @NotBlank(message = "Укажите доступна ли вещь для бронирования.")
     private Boolean available;
     private Long requestId;
 }

@@ -39,7 +39,7 @@ class RequestControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    public static final String USER_ID = "X-Sharer-User-Id";
+    private static final String USER_ID = "X-Sharer-User-Id";
     private RequestDto requestDto;
     private ResponseEntity<Object> responseEntity;
 

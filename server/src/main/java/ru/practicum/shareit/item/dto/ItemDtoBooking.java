@@ -13,6 +13,5 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class ItemDtoBooking {
     private long id;
-    @NotBlank(message = "Укажите название.")
     private String name;
 }

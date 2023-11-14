@@ -45,6 +45,7 @@ public class BookingClient extends BaseClient {
     public ResponseEntity<Object> findUsersBookings(long userId, String state, Integer from, Integer size) {
         requestValidator.validFrom(from);
         requestValidator.validSize(size);
+        bookingValidator.validState(state);
         Map<String, Object> parameters = Map.of(
                 "state", state,
                 "from", from,
@@ -56,6 +57,7 @@ public class BookingClient extends BaseClient {
     public ResponseEntity<Object> findOwnersBookings(long userId, String state, int from, int size) {
         requestValidator.validFrom(from);
         requestValidator.validSize(size);
+        bookingValidator.validState(state);
         Map<String, Object> parameters = Map.of(
                 "state", state,
                 "from", from,

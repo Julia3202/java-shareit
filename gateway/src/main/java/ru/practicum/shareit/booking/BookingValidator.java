@@ -2,9 +2,12 @@ package ru.practicum.shareit.booking;
 
 import lombok.extern.slf4j.Slf4j;
 import ru.practicum.shareit.booking.model.BookingDtoItem;
+import ru.practicum.shareit.booking.model.DateStatus;
 import ru.practicum.shareit.exception.ValidationException;
 
 import java.time.LocalDateTime;
+
+import static ru.practicum.shareit.booking.model.DateStatus.*;
 
 @Slf4j
 public class BookingValidator {
@@ -26,6 +29,14 @@ public class BookingValidator {
                 bookingDtoItem.getEnd().equals(bookingDtoItem.getStart())) {
             throw new ValidationException("Неверно указана дата или время возврата вещи. Дата и время окончания брони " +
                     "должно быть позже даты начала бронирования, поправьте данные и попробуйте повторить попытку.");
+        }
+        return true;
+    }
+
+    public Boolean validState(String state) {
+        DateStatus status = DateStatus.valueOf(state);
+        if (status != ALL && status != CURRENT && status != PAST && status != FUTURE && status != WAITING && status != REJECTED) {
+            throw new ValidationException("Unknown state: UNSUPPORTED_STATUS");
         }
         return true;
     }

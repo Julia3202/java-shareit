@@ -96,7 +96,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemDtoDated> findAllItemFromUser(long userId) {
         userValidatorService.existUserById(userId);
-        List<Item> items = itemRepository.findByOwnerId(userId);
+        List<Item> items = itemRepository.findAllByOwnerIdOrderById(userId);
         if (items.isEmpty()) {
             throw new NotFoundException("Пользователь " + userId + " не является хозяином ни одной вещи");
         }

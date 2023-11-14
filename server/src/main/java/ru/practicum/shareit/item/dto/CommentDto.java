@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class CommentDto {
     private Long id;
-    @NotBlank(message = "Нельзя отправлять пустой комментарий.")
     private String text;
     private ItemDto item;
     private String authorName;

@@ -102,9 +102,6 @@ public class BookingServiceImpl implements BookingService {
         Pageable page = PageRequest.of(from / size, size);
         Page<Booking> bookingPage;
         switch (DateStatus.valueOf(state)) {
-            case ALL:
-                bookingPage = bookingRepository.findAllByBookerIdOrderByStartDesc(userId, page);
-                break;
             case CURRENT:
                 bookingPage = bookingRepository.findAllByBookerIdAndStartBeforeAndEndAfterOrderByStart(userId,
                         LocalDateTime.now(), LocalDateTime.now(), page);
@@ -124,7 +121,7 @@ public class BookingServiceImpl implements BookingService {
                 bookingPage = bookingRepository.findAllByBookerIdAndStatusOrderByStartDesc(userId, Status.REJECTED, page);
                 break;
             default:
-                throw new ValidationException("Unknown state: UNSUPPORTED_STATUS");
+                bookingPage = bookingRepository.findAllByBookerIdOrderByStartDesc(userId, page);
         }
         return bookingPage.stream()
                 .map(BookingMapper::toBookingDto)
@@ -137,9 +134,6 @@ public class BookingServiceImpl implements BookingService {
         Pageable page = PageRequest.of(from / size, size);
         Page<Booking> bookingPage;
         switch (DateStatus.valueOf(state)) {
-            case ALL:
-                bookingPage = bookingRepository.findAllByItemOwnerIdOrderByStartDesc(userId, page);
-                break;
             case CURRENT:
                 bookingPage = bookingRepository.findAllByItemOwnerIdAndStartBeforeAndEndAfterOrderByStart(userId,
                         LocalDateTime.now(), LocalDateTime.now(), page);
@@ -161,7 +155,7 @@ public class BookingServiceImpl implements BookingService {
                         Status.REJECTED, page);
                 break;
             default:
-                throw new ValidationException("Unknown state: UNSUPPORTED_STATUS");
+                bookingPage = bookingRepository.findAllByItemOwnerIdOrderByStartDesc(userId, page);
         }
         return bookingPage.stream()
                 .map(BookingMapper::toBookingDto)

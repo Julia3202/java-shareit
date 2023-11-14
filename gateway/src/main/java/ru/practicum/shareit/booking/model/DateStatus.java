@@ -6,5 +6,6 @@ public enum DateStatus {
     PAST,
     FUTURE,
     WAITING,
-    REJECTED
+    REJECTED,
+    UNSUPPORTED_STATUS
 }
