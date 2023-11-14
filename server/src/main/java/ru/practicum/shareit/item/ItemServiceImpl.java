@@ -100,10 +100,14 @@ public class ItemServiceImpl implements ItemService {
         if (items.isEmpty()) {
             throw new NotFoundException("Пользователь " + userId + " не является хозяином ни одной вещи");
         }
-
+        List<Long> itemsIds = items.stream()
+                .map(Item::getId)
+                .collect(Collectors.toList());
         List<ItemDtoDated> datedItemList = new ArrayList<>();
-        List<Booking> lastBookings = bookingRepository.findLastBookingsByBookerId(userId, LocalDateTime.now());
-        List<Booking> nextBookings = bookingRepository.findNextBookingsByBookerId(userId, LocalDateTime.now());
+        List<Booking> lastBookings = bookingRepository.findAllByItemOwnerIdAndItemIdInAndStartBeforeOrderByStartDesc(
+                userId, itemsIds, LocalDateTime.now());
+        List<Booking> nextBookings = bookingRepository.findAllByItemOwnerIdAndItemIdInAndStartAfterOrderByStart(
+                userId, itemsIds, LocalDateTime.now());
         List<Comment> comments = commentRepository.findCommentsForItemsByOwnerId(userId);
 
         for (Item item : items) {
