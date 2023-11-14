@@ -37,7 +37,7 @@ class RequestControllerTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     public static final String USER_ID = "X-Sharer-User-Id";
     private RequestDto requestDto;
