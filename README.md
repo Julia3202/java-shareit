@@ -17,7 +17,7 @@
 1.Необходимо настроенная система виртуализации, установленный Docker Desktop(скачать и установить можно с официального сайта https://www.docker.com/products/docker-desktop/)
 
 2.Клонируйте репозиторий проекта на свою локальную машину:  
-git clone https://github.com/Julia3202/java-shareit
+git clone git@github.com:Julia3202/java-shareit.git
 
 3.Запустите коммандную строку и перейдите в коррень директории с проектом.
 
